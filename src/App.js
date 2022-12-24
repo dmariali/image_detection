@@ -1,25 +1,53 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
 
-function App() {
+const App = () => {
+  const [annotatedImage, setAnnotatedImage] = useState(null);
+
+  const detect = async (image) => {
+    console.log('URL is ', URL.createObjectURL(image), 'and name is ', image.name)
+
+    // const response = await fetch("https://reqbin.com/echo/post/json", {
+    //   method: 'POST',
+    //   headers: {
+    //     'Accept': 'application/json',
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: `{
+    //     "Id": 78912,
+    //     "Customer": "Jason Sweet",
+    //     "Quantity": 1,
+    //     "Price": 18.00
+    //     }`,
+    //   });
+  
+    //   response.json().then(data => {
+    //     console.log(data);
+    //   });
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <h1>Upload image</h1>
+      <input
+        type="file"
+        name="myImage"
+        onChange={(event) => {
+          detect(event.target.files[0])
+        }}
+      />
+
+      {annotatedImage && (
+        <div>
+        {/* <img alt="not found" width={"250px"} src={URL.createObjectURL(annotatedImage)} /> */}
+        <br />
+        <button onClick={()=>setAnnotatedImage(null)}>Remove</button>
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default App;
+
+
