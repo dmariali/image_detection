@@ -5,22 +5,20 @@ const App = () => {
   const [annotatedImage, setAnnotatedImage] = useState(null);
 
   const detect = async (image) => {
-    const fetch_url = "http://127.0.0.1:8000/";
-    const response = await fetch(fetch_url, {
-      method: "GET",
+    const fetch_url = "http://127.0.0.1:8000/objectdetection";
+    const image_url = URL.createObjectURL(image)
+    console.log(image_url)
+    const body_deets = {'url': URL.createObjectURL(image),'name': image.name}
+    console.log(body_deets)
+    await fetch(fetch_url, {
+      method: "POST",
       headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
+        'Content-type':'application/json'
       },
-      // body: `{
-      //   "url": URL.createObjectURL(image),
-      //   "name": image.name,
-      //   }`,
-    });
+      body: JSON.stringify(body_deets)
+    }).then((res) => res.json())
+    .then ((data) => console.log(data))
 
-    response.json().then((data) => {
-      console.log(data);
-    });
   };
 
   return (
