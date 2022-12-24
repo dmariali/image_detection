@@ -23,3 +23,6 @@ yarn-debug.log*
 yarn-error.log*
 
 ObjectDetector/bin
+ObjectDetector/lib
+ObjectDetector/__pycache__
+ObjectDetector/pyvenve.cfg
