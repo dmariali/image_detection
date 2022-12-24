@@ -5,25 +5,22 @@ const App = () => {
   const [annotatedImage, setAnnotatedImage] = useState(null);
 
   const detect = async (image) => {
-    console.log('URL is ', URL.createObjectURL(image), 'and name is ', image.name)
-
-    // const response = await fetch("https://reqbin.com/echo/post/json", {
-    //   method: 'POST',
-    //   headers: {
-    //     'Accept': 'application/json',
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: `{
-    //     "Id": 78912,
-    //     "Customer": "Jason Sweet",
-    //     "Quantity": 1,
-    //     "Price": 18.00
-    //     }`,
-    //   });
+    const fetch_url = 'http://127.0.0.1:8000/objectdetection/'
+    const response = await fetch(fetch_url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: `{
+        "url": URL.createObjectURL(image),
+        "name": image.name,
+        }`,
+      });
   
-    //   response.json().then(data => {
-    //     console.log(data);
-    //   });
+      response.json().then(data => {
+        console.log(data);
+      });
   }
 
   return (
