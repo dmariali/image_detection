@@ -4,8 +4,7 @@ import torchvision
 from torchvision.io import read_image
 from torchvision.utils import draw_bounding_boxes
 from PIL import Image
-import requests
-import json
+import os
 
 def detect_objects(img_name,img_url):
 #image = Image.open(requests.get(url, stream=True).raw)
@@ -29,13 +28,16 @@ def detect_objects(img_name,img_url):
     for score, label, box in zip(results["scores"], results["labels"], results["boxes"]):
         box = [round(i, 2) for i in box.tolist()]
         labels.append(model.config.id2label[label.item()])
-        print(labels)
         print(
                 f"Detected {model.config.id2label[label.item()]} with confidence "
                 f"{round(score.item(), 3)} at location {box}"
         )
 
-    response = draw_bounding_box(img_url,img_name,results["boxes"],labels)
+    output_img_path = draw_bounding_box(img_url,img_name,results["boxes"],labels)
+    response = {
+        'outputImageUrl': output_img_path,
+        'objects': labels,
+    }
     return response
 
 def draw_bounding_box(img_url,img_name,boxes,labels):
@@ -45,7 +47,6 @@ def draw_bounding_box(img_url,img_name,boxes,labels):
     box = torch.tensor(boxes, dtype=torch.int)
     
     # draw bounding box and fill color
-    # labels = ["person","dog","other1","other2"]
     img = draw_bounding_boxes(image, box, width=5,
                             colors="green", 
                             fill=False,
@@ -54,15 +55,9 @@ def draw_bounding_box(img_url,img_name,boxes,labels):
     
     # transform this image to PIL image
     img = torchvision.transforms.ToPILImage()(img)
+    output_img_path = str(os.environ.get('OUTPUT-PICS-LOCATION','../src/output-pics/')) + img_name +'-labeled-image.jpeg'
+    img.save(output_img_path)
     
-    # display output
-    #img.show()
-    img_path = 'output-pics/' + img_name +'-labeled-image.jpeg'
-    img.save(img_path)
-    response = {
-        'image-path-labled': img_path,
-        'objects': labels,
-    }
-    return response
+    return output_img_path
 
 

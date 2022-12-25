@@ -8,3 +8,7 @@
 
 <h1>General</h1>
 To run the web server, from inside the objectdector folder run: uvicorn api:app --reload 
+
+<h2>Project Description</h2>
+
+This project detects the objects in a user uploaded image.
