@@ -6,7 +6,7 @@ const App = () => {
   const [annotatedImage, setAnnotatedImage] = useState(null);
 
   const detect = async (event) => {
-    const fetch_url = "http://127.0.0.1:8000/uploadfile";
+    const fetch_url = "http://127.0.0.1:8000/detectobjects";
 
     const files = Array.from(event.target.files);
     const formData = new FormData();
@@ -19,7 +19,7 @@ const App = () => {
       .then((res) => res.blob())
       .then((data) => {
         console.log(data)
-        setAnnotatedImage(data.img)
+        setAnnotatedImage(data)
       });
   };
 
@@ -38,7 +38,7 @@ const App = () => {
       {originalImage && (
         <div>
           <h1> ORIGINAL IMAGE </h1>
-          <img alt="not found" width={"250px"} src={URL.createObjectURL(originalImage)} />
+          <img alt="not found" width={"500px"} src={URL.createObjectURL(originalImage)} />
           <br />
           <button onClick={() => setOriginalImage(null)}>Remove</button>
         </div>
@@ -46,7 +46,7 @@ const App = () => {
       { annotatedImage && (
         <div>
           <h1> ANNOTATED IMAGE </h1>
-          <img alt={`not found ${annotatedImage}`} width={"250px"} src={URL.createObjectURL(annotatedImage)} />
+          <img alt={`not found ${annotatedImage}`} width={"500px"} src={URL.createObjectURL(annotatedImage)} />
         </div>
       )}
     </div>

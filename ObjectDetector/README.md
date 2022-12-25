@@ -11,4 +11,4 @@ To run the web server, from inside the objectdector folder run: uvicorn api:app 
 
 <h2>Project Description</h2>
 
-This project detects the objects in a user uploaded image.
+This project detects the objects in a user uploaded image. It uses the facebook/resnet-50 model from the huggingface model hub for detection.

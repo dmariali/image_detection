@@ -1,4 +1,5 @@
 from fastapi import FastAPI, UploadFile, File, Depends
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
@@ -55,6 +56,8 @@ async def create_upload_file(data: UploadFile = File(...)):
         file_object.write(data.file.read())
     # print("info": f"file '{data.filename}' saved at '{file_location}'")
     response = model.detect_objects(data.filename,file_location)
-    return response
+    path = response['outputImageUrl']
+    return FileResponse(path)
+    # return response
 
     
