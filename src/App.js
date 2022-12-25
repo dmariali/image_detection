@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./App.css";
 
 const App = () => {
+  const [originalImage, setOriginalImage] = useState(null)
   const [annotatedImage, setAnnotatedImage] = useState(null);
 
   const detect = async (event) => {
@@ -15,8 +16,11 @@ const App = () => {
       method: "POST",
       body: formData,
     })
-      .then((res) => res.json())
-      .then((data) => console.log(data));
+      .then((res) => res.blob())
+      .then((data) => {
+        console.log(data)
+        setAnnotatedImage(data.img)
+      });
   };
 
   return (
@@ -26,15 +30,23 @@ const App = () => {
         type="file"
         name="myImage"
         onChange={(event) => {
+          setOriginalImage(event.target.files[0])
           detect(event);
         }}
       />
 
-      {annotatedImage && (
+      {originalImage && (
         <div>
-          {/* <img alt="not found" width={"250px"} src={URL.createObjectURL(annotatedImage)} /> */}
+          <h1> ORIGINAL IMAGE </h1>
+          <img alt="not found" width={"250px"} src={URL.createObjectURL(originalImage)} />
           <br />
-          <button onClick={() => setAnnotatedImage(null)}>Remove</button>
+          <button onClick={() => setOriginalImage(null)}>Remove</button>
+        </div>
+      )}
+      { annotatedImage && (
+        <div>
+          <h1> ANNOTATED IMAGE </h1>
+          <img alt={`not found ${annotatedImage}`} width={"250px"} src={URL.createObjectURL(annotatedImage)} />
         </div>
       )}
     </div>
