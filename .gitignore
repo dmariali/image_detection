@@ -27,4 +27,6 @@ ObjectDetector/lib
 ObjectDetector/__pycache__
 ObjectDetector/pyvenve.cfg
 ObjectDetector/venv
+ObjectDetector/pics
+ObjectDetector/output-pics
 *.jpeg

@@ -4,21 +4,19 @@ import "./App.css";
 const App = () => {
   const [annotatedImage, setAnnotatedImage] = useState(null);
 
-  const detect = async (image) => {
-    const fetch_url = "http://127.0.0.1:8000/objectdetection";
-    const image_url = URL.createObjectURL(image)
-    console.log(image_url)
-    const body_deets = {'url': URL.createObjectURL(image),'name': image.name}
-    console.log(body_deets)
+  const detect = async (event) => {
+    const fetch_url = "http://127.0.0.1:8000/uploadfile";
+
+    const files = Array.from(event.target.files);
+    const formData = new FormData();
+    formData.append("data", files[0]);
+
     await fetch(fetch_url, {
       method: "POST",
-      headers: {
-        'Content-type':'application/json'
-      },
-      body: JSON.stringify(body_deets)
-    }).then((res) => res.json())
-    .then ((data) => console.log(data))
-
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data));
   };
 
   return (
@@ -28,7 +26,7 @@ const App = () => {
         type="file"
         name="myImage"
         onChange={(event) => {
-          detect(event.target.files[0]);
+          detect(event);
         }}
       />
 
