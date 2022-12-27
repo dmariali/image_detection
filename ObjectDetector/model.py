@@ -4,7 +4,10 @@ import torchvision
 from torchvision.io import read_image
 from torchvision.utils import draw_bounding_boxes
 from PIL import Image
+from dotenv import load_dotenv
 import os
+
+load_dotenv()
 
 def detect_objects(img_name,img_url):
 #image = Image.open(requests.get(url, stream=True).raw)
@@ -35,8 +38,9 @@ def detect_objects(img_name,img_url):
 
     output_img_path = draw_bounding_box(img_url,img_name,results["boxes"],labels)
     response = {
-        'outputImageUrl': output_img_path,
-        'objects': labels,
+        'name':img_name,
+        'url': output_img_path,
+        'object_labels': labels,
     }
     return response
 
@@ -55,7 +59,7 @@ def draw_bounding_box(img_url,img_name,boxes,labels):
     
     # transform this image to PIL image
     img = torchvision.transforms.ToPILImage()(img)
-    output_img_path = str(os.environ.get('OUTPUT-PICS-LOCATION','../src/output-pics/')) + img_name +'-labeled-image.jpeg'
+    output_img_path = str(os.getenv('OUTPUT-PICS-LOCATION','output-pics/')) + img_name +'-labeled-image.jpeg'
     img.save(output_img_path)
     
     return output_img_path
