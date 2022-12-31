@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, Depends
+from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.cors import CORSMiddleware
@@ -28,6 +28,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=['X-image-id'],
 )
 
 @app.on_event("startup")
@@ -76,7 +77,7 @@ async def create_upload_file(data: UploadFile = File(...)):
     response = model.detect_objects(data.filename,file_location)
     _id = app.collection.insert_one(response) 
 
-    headers= {"image_id": str(_id.inserted_id)}
+    headers= {"X-image-id": str(_id.inserted_id)}
     path = response['url']
     return FileResponse(path, headers=headers)  
     # return response

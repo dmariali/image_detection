@@ -7,6 +7,7 @@ const App = () => {
 
   const detect = async (event) => {
     const fetch_url = "http://127.0.0.1:8000/detectobjects";
+    let image_id
 
     const files = Array.from(event.target.files);
     const formData = new FormData();
@@ -16,12 +17,28 @@ const App = () => {
       method: "POST",
       body: formData,
     })
-      .then((res) => res.blob())
+      .then((res) => {
+        image_id = res.headers.get('X-image-id')
+        return res.blob()})
       .then((data) => {
         console.log(data)
         setAnnotatedImage(data)
+        getObjectLabels(image_id)
       });
   };
+
+  const getObjectLabels = async (imageId) => {
+    const fetch_url = `http://127.0.0.1:8000/objectlabels/${imageId}`
+
+    await fetch(fetch_url)
+      .then((res) => {
+        console.log(res)
+        return res.json()
+      })
+      .then((data) => {
+        console.log(data)
+      });
+  }
 
   return (
     <div className="App">
